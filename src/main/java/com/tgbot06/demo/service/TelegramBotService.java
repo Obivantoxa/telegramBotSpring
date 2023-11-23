@@ -38,26 +38,16 @@ public class TelegramBotService extends TelegramLongPollingBot {
             throw new RuntimeException(e);
         }
     }
-    public void BotGiveResponse(String response,String userName, long chatId) {
-        SendMessage message = new SendMessage();
-        message.getChatId();
-        message.setChatId(chatId);
-        message.setText(response);
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
     @Override
     public void onUpdateReceived(Update update) {
         long chatId = update.getMessage().getChatId();
-       // String userName = update.
+        String userName = update.getMessage().getFrom().getUserName();// запрашиваю имя пользователя в телеграмме через бота
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             if (messageText.equals("/start")) {
-                BotGiveResponse(methods.StartMessage(), chatId);
+                BotGiveResponse(methods.StartMessage(userName), chatId);
             } else if (messageText.equals("/help")) {
                 BotGiveResponse(methods.HelpMessage(), chatId);
             }

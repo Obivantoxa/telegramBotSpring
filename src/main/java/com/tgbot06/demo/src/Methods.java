@@ -2,8 +2,8 @@ package com.tgbot06.demo.src;
 
 public class Methods {
 
-    public String StartMessage(){
-        return "Добро пожаловать в бота по управлению бронированием в отеле.\n" +
+    public String StartMessage(String userName){
+        return "Добро пожаловать "+ userName +" в бота по управлению бронированием в отеле.\n" +
                 "Для получения справки введите команду /help";
     }
 
