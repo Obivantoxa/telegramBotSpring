@@ -13,6 +13,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
     final BotConfig config;
     final Methods methods = new Methods();
 
+
     public TelegramBotService(BotConfig config) {
         this.config = config;
     }
@@ -30,8 +31,13 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     public void BotGiveResponse(String response, long chatId) {
         SendMessage message = new SendMessage();
+        String response1 = "Enter new text or /help";
         message.setChatId(chatId);
-        message.setText(response);
+        if (response == null) {
+            message.setText(response1);
+        } else {
+            message.setText(response);
+        }
         try {
             execute(message);
         } catch (TelegramApiException e) {
@@ -42,6 +48,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
         long chatId = update.getMessage().getChatId();
         String userName = update.getMessage().getFrom().getUserName();// запрашиваю имя пользователя в телеграмме через бота
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -50,6 +57,12 @@ public class TelegramBotService extends TelegramLongPollingBot {
                 BotGiveResponse(methods.StartMessage(userName), chatId);
             } else if (messageText.equals("/help")) {
                 BotGiveResponse(methods.HelpMessage(), chatId);
+            } else if (messageText.equals("/getFreeRooms")) {
+                BotGiveResponse("Your free Rooms: \n" + methods.getFreeRooms(), chatId);
+            } else if (messageText.contains("/reserve")) {
+                BotGiveResponse(methods.reserveAnswerMessage(messageText), chatId);
+            } else if (messageText.contains("/unreserve")) {
+                BotGiveResponse(methods.unReserveAnswerMessage(messageText), chatId);
             }
     /*{
         if(update.hasMessage() && update.getMessage().hasText()){
